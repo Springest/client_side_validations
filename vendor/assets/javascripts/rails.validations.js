@@ -52,15 +52,13 @@
 
   validatorsFor = function(name, validators) {
     var captures, validator, validator_name;
-    if (captures = name.match(/\[(\w+_attributes)\].*\[(\w+)\]\[(\w+_attributes)\]\[(\w+)\]\[(\w+)\]$/)) {
-    if (captures = name.match(/\[(\w+_attributes)\].*\[\w+\]\[(\w+_attributes)\]\[\w+\]\[(\w+)\]$/)) {
-      for (validator_name in validators) {
-        validator = validators[validator_name];
-        if (validator_name.match("\\[" + captures[1] + "\\].*\\[\\]\\[" + captures[2] + "\\].*\\[\\]\\[" + captures[3] + "\\]$")) {
-          name = name.replace(/\[(\d+)\]/g, '[]');
-        }
-      }
-    } else if (captures = name.match(/\[(\w+_attributes)\].*\[(\w+)\]$/)) {
+    if (validators.hasOwnProperty(name)) {
+      return validators[name];
+    }
+
+    name = name.replace(/\[(\w+_attributes)\]\[[\da-z_]+\]\[(\w+_attributes)\]/g, "[$1][][$2]");
+
+    if (captures = name.match(/\[(\w+_attributes)\].*\[(\w+)\]$/)) {
       for (validator_name in validators) {
         validator = validators[validator_name];
         if (validator_name.match("\\[" + captures[1] + "\\].*\\[\\]\\[" + captures[2] + "\\]$")) {

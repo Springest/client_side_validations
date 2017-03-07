@@ -13,6 +13,7 @@ QUnit.module('Validate Element', {
         'user[phone_numbers_attributes][][number]':{"presence":[{"message": "must be present"}]},
         'user[phone_numbers_attributes][country_code][][code]':{"presence":[{"message": "must be present"}]},
         'user[phone_numbers_attributes][deeply][nested][][attribute]':{"presence":[{"message": "must be present"}]},
+        'user[phone_numbers_attributes][][labels_attributes][][label]':{"presence":[{"message": "must be present"}]},
         'customized_filed':{"length":[{"messages":{"minimum":"is too short (minimum is 4 characters)"},"minimum":4}]}
       }
     }
@@ -95,6 +96,12 @@ QUnit.module('Validate Element', {
         .append($('<input />', {
           name: 'user[phone_numbers_attributes][deeply][nested][5154ce728c06dedad4000001][attribute]',
           id: 'user_phone_numbers_attributes_deeply_nested_5154ce728c06dedad4000001_attribute',
+          type: 'text'
+        }))
+        .append($('<label for="user_phone_numbers_attributes_1_labels_attributes_2_label">Two rails-nested-attributes</label>'))
+        .append($('<input />', {
+          name: 'user[phone_numbers_attributes][1][labels_attributes][2][label]',
+          id: 'user_phone_numbers_attributes_1_labels_attributes_2_label',
           type: 'text'
         }))
         .append($('<label for="user_info_attributes_eye_color">Eye Color</label>'))
@@ -193,6 +200,12 @@ QUnit.test('Validate nested attributes', function(assert) {
 
   input = form.find('input#user_phone_numbers_attributes_deeply_nested_5154ce728c06dedad4000001_attribute');
   label = $('label[for="user_phone_numbers_attributes_deeply_nested_5154ce728c06dedad4000001_attribute"]');
+  input.trigger('focusout');
+  assert.ok(input.parent().hasClass('field_with_errors'));
+  assert.ok(label.parent().hasClass('field_with_errors'));
+
+  input = form.find('input#user_phone_numbers_attributes_1_labels_attributes_2_label');
+  label = $('label[for="user_phone_numbers_attributes_1_labels_attributes_2_label"]');
   input.trigger('focusout');
   assert.ok(input.parent().hasClass('field_with_errors'));
   assert.ok(label.parent().hasClass('field_with_errors'));
